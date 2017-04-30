@@ -29,6 +29,8 @@ public class Main {
     public static void trainPercs(Perceptron[] percs, String trainLoc, int setSize, int[] labels) {
         double[] image = new double[784];
         for (int fileIndex = 1; fileIndex <= setSize; fileIndex++) {
+            //Generate the filename "[trainLoc]/image[fileIndex].bin"
+            //fileIndex is 6 digits long, padded with 0s on the left
             String filename = String.format("%1$s/image%2$06d.bin", trainLoc, fileIndex);
             MyFileReader.readImageInto(filename, image);
             for (Perceptron p : percs) {
@@ -59,6 +61,8 @@ public class Main {
         int numCorrect = 0;
         double[] image = new double[784];
         for (int fileIndex = 10001; fileIndex <= 11000; fileIndex++) {
+            //Generate the filename "[trainLoc]/image[fileIndex].bin"
+            //fileIndex is 6 digits long, padded with 0s on the left
             String filename = String.format("%1$s/image%2$06d.bin", trainLoc, fileIndex);
             MyFileReader.readImageInto(filename, image);
             int bestGuess = 0;

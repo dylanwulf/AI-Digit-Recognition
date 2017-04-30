@@ -16,6 +16,8 @@ public class Trainer extends Thread {
     public void run() {
         double[] image = new double[784];
         for (int fileIndex = start; fileIndex <= end; fileIndex++) {
+            //Generate the filename "[trainLoc]/image[fileIndex].bin"
+            //fileIndex is 6 digits long, padded with 0s on the left
             String filename = String.format("%1$s/image%2$06d.bin", trainLoc, fileIndex);
             MyFileReader.readImageInto(filename, image);
             for (Perceptron p : percs) {
