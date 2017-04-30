@@ -19,9 +19,7 @@ public class Trainer extends Thread {
             String filename = String.format("%1$s/image%2$06d.bin", trainLoc, fileIndex);
             MyFileReader.readImageInto(filename, image);
             for (Perceptron p : percs) {
-                synchronized (p) {
-                    p.train(image, labels[fileIndex - 1]);
-                }
+                p.train(image, labels[fileIndex - 1]);
             }
         }
     }
