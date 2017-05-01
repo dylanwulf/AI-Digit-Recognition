@@ -11,7 +11,7 @@ public class Perceptron {
     private double learnRate;
     
     public Perceptron(int digit) {
-        this(digit, 0.5); //default to learn rate of 0.5
+        this(digit, 0.2); //default to learn rate of 0.2
     }
     
     public Perceptron(int digit, double learnRate) {
