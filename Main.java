@@ -7,24 +7,19 @@ public class Main {
         String trainLoc = "../train_images";
         Perceptron[] percs = new Perceptron[10];
         for (int i = 0; i <= 9; i++)
-            percs[i] = new Perceptron(i, 0.05);
+            percs[i] = new Perceptron(i, 0.15);
         int[] labels = MyFileReader.readLabels(trainLoc + "/labels.bin");
-        
-        long start, end;
-        start = System.currentTimeMillis();
-        trainPercs(percs, trainLoc, 7000, labels);
-        end = System.currentTimeMillis();
-        System.out.println("Single thread training time: " + (end - start) + " ms");
-        System.out.println("Percent correct: " + testPercs(percs, trainLoc, labels));
-        for (int i = 0; i <= 9; i++)
-            percs[i] = new Perceptron(i, 0.05);
-        start = System.currentTimeMillis();
-        multiTrainPercs(percs, trainLoc, 7000, labels, 8);
-        end = System.currentTimeMillis();
-        System.out.println("Multi thread training time: " + (end - start) + " ms");
+        multiTrainPercs(percs, trainLoc, 1000, labels, 8);
+        for (int i = 0; i < percs.length; i++) {
+            percs[i].saveWeights("weights" + i + ".bin");
+        }
         double percentCorrect = testPercs(percs, trainLoc, labels);
         System.out.println("Percent correct: " + percentCorrect);
+        for (int i = 0; i <= 9; i++)
+            System.out.println("Perceptron " + i + ": " + percs[i].getTrainingSessions() + " training sessions");
     }
+    
+    
     
     public static void trainPercs(Perceptron[] percs, String trainLoc, int setSize, int[] labels) {
         double[] image = new double[784];
@@ -45,9 +40,10 @@ public class Main {
         for (int i = 0; i < numThreads; i++) {
             int start = setSize / numThreads * i + 1;
             int end = (i == numThreads - 1)? setSize : setSize / numThreads * (i+1);
-            trainers[i] = new Trainer(percs, start, end, trainLoc, labels);
-            trainers[i].start();
+            trainers[i] = new Trainer(percs, start, end, trainLoc, labels, 100);
         }
+        for (Trainer t : trainers)
+            t.start();
         for (Trainer t : trainers) {
             try {
                 t.join();

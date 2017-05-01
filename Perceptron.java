@@ -9,6 +9,7 @@ public class Perceptron {
     private double[] weights;
     private int digit;
     private double learnRate;
+    private int trainingSessions;
     
     public Perceptron(int digit) {
         this(digit, 0.5); //default to learn rate of 0.5
@@ -25,7 +26,9 @@ public class Perceptron {
     }
     
     //Create perceptron from weights in file 'fname'
-    public Perceptron(String fname) {
+    public Perceptron(String fname, double learnRate) {
+        this.learnRate = learnRate;
+        trainingSessions = 0;
         try {
             FileInputStream fis = new FileInputStream(fname);
             DataInputStream dis = new DataInputStream(fis);
@@ -73,9 +76,9 @@ public class Perceptron {
     
     //Trains this perceptron with the provided image and
     //corresponding label. If this perceptron gives the wrong
-    //result, updates the weights. Returns total change in weights.
+    //result, updates the weights. Returns the maximum % change made to a single weight.
     public synchronized double train(double[] image, int label) {
-        double totalChange = 0.0;
+        double maxPercentChange = 0.0;
         double g = recognize(image);
         double y = (digit == label)? 1 : 0;
         double err = y - g;
@@ -83,9 +86,19 @@ public class Perceptron {
         double updateCoef = learnRate * err * gPrime;
         weights[0] += updateCoef * 1; //dummy input = 1
         for (int i = 0; i < image.length; i++) {
+            double before = weights[i + 1];
             weights[i + 1] += updateCoef * image[i];
-            totalChange += updateCoef * image[i];
+            double after = weights[i + 1];
+            double avg = (before + after) / 2;
+            double percentDiff = Math.abs(before - after) / avg * 100;
+            if (percentDiff > maxPercentChange)
+                maxPercentChange = percentDiff;
         }
-        return totalChange;
+        trainingSessions++;
+        return maxPercentChange;
+    }
+    
+    public int getTrainingSessions() {
+        return trainingSessions;
     }
 }
