@@ -9,17 +9,13 @@ public class Main {
         for (int i = 0; i <= 9; i++)
             percs[i] = new Perceptron(i, 0.15);
         int[] labels = MyFileReader.readLabels(trainLoc + "/labels.bin");
-        multiTrainPercs(percs, trainLoc, 1000, labels, 8);
+        multiTrainPercs(percs, trainLoc, 10000, labels, 8);
         for (int i = 0; i < percs.length; i++) {
             percs[i].saveWeights("weights" + i + ".bin");
         }
         double percentCorrect = testPercs(percs, trainLoc, labels);
         System.out.println("Percent correct: " + percentCorrect);
-        for (int i = 0; i <= 9; i++)
-            System.out.println("Perceptron " + i + ": " + percs[i].getTrainingSessions() + " training sessions");
     }
-    
-    
     
     public static void trainPercs(Perceptron[] percs, String trainLoc, int setSize, int[] labels) {
         double[] image = new double[784];
@@ -31,7 +27,6 @@ public class Main {
             for (Perceptron p : percs) {
                 p.train(image, labels[fileIndex - 1]);
             }
-            //System.out.println("Trained on file #" + fileIndex);
         }
     }
     
@@ -40,7 +35,7 @@ public class Main {
         for (int i = 0; i < numThreads; i++) {
             int start = setSize / numThreads * i + 1;
             int end = (i == numThreads - 1)? setSize : setSize / numThreads * (i+1);
-            trainers[i] = new Trainer(percs, start, end, trainLoc, labels, 100);
+            trainers[i] = new Trainer(percs, start, end, trainLoc, labels);
         }
         for (Trainer t : trainers)
             t.start();
@@ -70,7 +65,6 @@ public class Main {
                     bestSigmoid = recResult;
                 }
             }
-            //System.out.println("#" + fileIndex + ". Guess: " + bestGuess + " Actual: " + labels[fileIndex - 1]);
             if (bestGuess == labels[fileIndex - 1])
                 numCorrect++;
         }

@@ -9,7 +9,6 @@ public class Perceptron {
     private double[] weights;
     private int digit;
     private double learnRate;
-    private int trainingSessions;
     
     public Perceptron(int digit) {
         this(digit, 0.5); //default to learn rate of 0.5
@@ -28,7 +27,6 @@ public class Perceptron {
     //Create perceptron from weights in file 'fname'
     public Perceptron(String fname, double learnRate) {
         this.learnRate = learnRate;
-        trainingSessions = 0;
         try {
             FileInputStream fis = new FileInputStream(fname);
             DataInputStream dis = new DataInputStream(fis);
@@ -94,11 +92,6 @@ public class Perceptron {
             if (percentDiff > maxPercentChange)
                 maxPercentChange = percentDiff;
         }
-        trainingSessions++;
         return maxPercentChange;
-    }
-    
-    public int getTrainingSessions() {
-        return trainingSessions;
     }
 }
