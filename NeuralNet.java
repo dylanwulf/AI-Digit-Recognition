@@ -14,7 +14,7 @@ public class NeuralNet {
     4: number of threads to use (training only)
     */
     public static void main(String[] args) {
-        String trainLoc = (args.length >= 2)? args[1] : "../train_images";
+        String trainLoc = (args.length >= 2)? args[1] : ".." + File.separator + "train_images";
         
         Perceptron[] percs = new Perceptron[10];
         int[] labels = MyFileReader.readLabels(trainLoc + File.separator + "labels.bin");
