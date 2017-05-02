@@ -2,6 +2,7 @@
 //CSC380: Artificial Intelligence
 //Project 3: Handwritten Digit Recognition
 
+//This file contains code for reading data from files, such as images and labels
 //Note: Most of the code in this file was adapted from the provided
 //LabelList and SillyImage classes
 
@@ -27,6 +28,8 @@ public class MyFileReader {
         return image;
     }
     
+    //Read image into a predefined array
+    //avoids creating a new array for every image in order to improve efficiency
     public static void readImageInto(String fname, double[] image) {
         try {
             FileInputStream fis = new FileInputStream(fname);
